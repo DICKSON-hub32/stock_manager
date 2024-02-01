@@ -1,5 +1,5 @@
 [package]
-name = "icp_rust_boilerplate_backend"
+name = "stock_manager_backend"
 version = "0.1.0"
 edition = "2021"
 

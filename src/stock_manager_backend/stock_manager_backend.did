@@ -1,3 +1,45 @@
+type Error = variant { NotFound : record { msg : text } };
+type Item = record {
+  id : nat64;
+  name : text;
+  description : text;
+  price : float64;
+};
+type ItemPayload = record { name : text; description : text; price : float64 };
+type Result = variant { Ok : Item; Err : Error };
+type Result_1 = variant { Ok : Stock; Err : Error };
+type Result_2 = variant { Ok : Transaction; Err : Error };
+type Result_3 = variant { Ok; Err : Error };
+type Result_4 = variant { Ok : vec Item; Err : Error };
+type Result_5 = variant { Ok : vec Stock; Err : Error };
+type Result_6 = variant { Ok : vec Transaction; Err : Error };
+type Stock = record { id : nat64; quantity : nat32; item_id : nat64 };
+type StockPayload = record { quantity : nat32; item_id : nat64 };
+type Transaction = record {
+  id : nat64;
+  transaction_type : TransactionType;
+  stock_id : nat64;
+  quantity : nat32;
+};
+type TransactionPayload = record {
+  transaction_type : TransactionType;
+  stock_id : nat64;
+  quantity : nat32;
+};
+type TransactionType = variant { Outflow; Inflow };
 service : {
-    "greet": (text) -> (text) query;
+  add_item : (ItemPayload) -> (Result);
+  add_stock : (StockPayload) -> (Result_1);
+  add_transaction : (TransactionPayload) -> (Result_2);
+  delete_item : (nat64) -> (Result_3);
+  delete_stock : (nat64) -> (Result_3);
+  delete_transaction : (nat64) -> (Result_3);
+  get_item_by_id : (nat64) -> (Result) query;
+  get_items : () -> (Result_4) query;
+  get_stock : () -> (Result_5) query;
+  get_stock_by_id : (nat64) -> (Result_1) query;
+  get_transactions : () -> (Result_6) query;
+  update_item : (nat64, ItemPayload) -> (Result);
+  update_stock : (nat64, StockPayload) -> (Result_1);
+  update_transaction : (nat64, TransactionPayload) -> (Result_2);
 }

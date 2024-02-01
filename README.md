@@ -1,4 +1,4 @@
-# icp_rust_message_board_contract
+# stock_manager contract
 
 ### Requirements
 * rustc 1.64 or higher
@@ -25,7 +25,7 @@ $ dfx start --background
 If you want to start working on your project right away, you might want to try the following commands:
 
 ```bash
-$ cd icp_rust_boilerplate/
+$ cd stock_manager_backend/
 $ dfx help
 $ dfx canister --help
 ```

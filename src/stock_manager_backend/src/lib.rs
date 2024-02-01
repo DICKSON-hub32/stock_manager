@@ -8,8 +8,8 @@ use std::{borrow::Cow, cell::RefCell};
 type Memory = VirtualMemory<DefaultMemoryImpl>;
 type IdCell = Cell<u64, Memory>;
 
-// Define the data structures for items, stock, and transactions
-#[derive(candid::CandidType, Clone, Serialize, Deserialize)]
+#[derive(candid::CandidType, Clone, Serialize, Deserialize, Default)]
+
 struct Item {
     id: u64,
     name: String,
@@ -126,6 +126,27 @@ thread_local! {
     static TRANSACTION_STR: RefCell<StableBTreeMap<u64, Transaction, Memory>> = RefCell::new(
         StableBTreeMap::init(MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(5))))
     );
+}
+
+// Payload structures for adding or updating items, stock, and transactions
+#[derive(candid::CandidType, Serialize, Deserialize)]
+struct ItemPayload {
+    name: String,
+    description: String,
+    price: f64,
+}
+
+#[derive(candid::CandidType, Serialize, Deserialize)]
+struct StockPayload {
+    item_id: u64,
+    quantity: u32,
+}
+
+#[derive(candid::CandidType, Serialize, Deserialize)]
+struct TransactionPayload {
+    stock_id: u64,
+    transaction_type: TransactionType,
+    quantity: u32,
 }
 
 // Candid queries for retrieving data
@@ -296,15 +317,6 @@ fn get_transactions() -> Result<Vec<Transaction>, Error> {
     Ok(transactions)
 }
 
-#[ic_cdk::query]
-fn get_transaction_by_id(id: u64) -> Result<Transaction, Error> {
-    TRANSACTION_STR.with(|service| {
-        service.borrow_mut().get(&id).ok_or(Error::NotFound {
-            msg: format!("Transaction with the id={} not found", id),
-        })
-    })
-}
-
 // Update functions for modifying data
 #[ic_cdk::update]
 fn add_transaction(payload: TransactionPayload) -> Result<Transaction, Error> {
@@ -362,5 +374,5 @@ enum Error {
     NotFound { msg: String },
 }
 
-// to generate candid
+// need this to generate candid
 ic_cdk::export_candid!();

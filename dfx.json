@@ -1,10 +1,10 @@
 {
   "version": 1,
   "canisters": {
-    "icp_rust_boilerplate_backend": {
+    "stock_manager_backend": {
       "type": "rust",
-      "package": "icp_rust_boilerplate_backend",
-      "candid": "src/icp_rust_boilerplate_backend/icp_rust_boilerplate_backend.did"
+      "package": "stock_manager_backend",
+      "candid": "src/stock_manager_backend/stock_manager_backend.did"
     }
   },
   "output_env_file": ".env"
